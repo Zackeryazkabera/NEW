@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permission Denied</title>
+    <link rel="stylesheet" href="/static/css/styles.css"> <!-- Add the correct path for your CSS file -->
+</head>
+
+<body>
+
+    <h1>Permission Denied</h1>
+
+    <p>You do not have permission to access this page.</p>
+
+    <br>
+
+    <!-- Logic for different user scenarios -->
+    <!-- Scenario 1: User not logged in -->
+    <div th:if="${not #authorization.expression('isAuthenticated()')}">
+        <a href="/login">Login here</a>
+    </div>
+
+    <!-- Scenario 2: User logged in as admin -->
+    <div th:if="${#authorization.expression('hasRole('ROLE_ADMIN')')}">
+        <a href="/index">Back to index</a> <!-- Adjust the href accordingly -->
+        <br>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Scenario 3: User logged in as a regular user -->
+    <div th:if="${#authorization.expression('hasRole('ROLE_USER')')}">
+        <a href="/index">Back to index</a> <!-- Adjust the href accordingly -->
+        <br>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Include any JavaScript if needed -->
+
+</body>
+
+</html>

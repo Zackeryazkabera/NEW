@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the Library Database</title>
+    <link rel="stylesheet" href="/static/css/styles.css"> <!-- Add the correct path for your CSS file -->
+</head>
+
+<body>
+
+    <h1>Welcome to the Library Database</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Reviews</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iterate over the books data -->
+            <tr th:each="book : ${books}">
+                <td th:text="${book.title}"></td>
+                <td th:text="${book.author}"></td>
+                <td><a th:href="'/view-book/' + ${book.id}">View</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <br>
+
+    <!-- Logic for different user scenarios -->
+    <!-- Scenario 1: User not logged in -->
+    <div th:if="${not #authorization.expression('isAuthenticated()')}">
+        <a href="/login">Login here</a>
+    </div>
+
+    <!-- Scenario 2: User logged in as admin -->
+    <div th:if="${#authorization.expression('hasRole('ROLE_ADMIN')')}">
+        <a href="/add-book">Add a Book</a>
+        <br>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Scenario 3: User logged in as a regular user -->
+    <div th:if="${#authorization.expression('hasRole('ROLE_USER')')}">
+        <a href="/logout">Logout</a>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a Review</title>
+    <link rel="stylesheet" href="/static/css/styles.css"> <!-- Add the correct path for your CSS file -->
+</head>
+
+<body>
+
+    <h1>Add your review!</h1>
+
+    <br>
+    <br>
+
+    <!-- Review form -->
+    <form action="/submit-review" method="post"> <!-- Adjust the action accordingly -->
+        <label for="reviewText">Your Review:</label>
+        <textarea id="reviewText" name="reviewText" rows="4" cols="50" required></textarea>
+        <br>
+        <br>
+        <button type="submit">Add Review</button>
+    </form>
+
+    <br>
+    <br>
+
+    <!-- Logic for different user scenarios -->
+    <!-- Scenario 1: User not logged in -->
+    <div th:if="${not #authorization.expression('isAuthenticated()')}">
+        <a href="/login">Login here</a>
+    </div>
+
+    <!-- Scenario 2: User logged in as admin -->
+    <div th:if="${#authorization.expression('hasRole('ROLE_ADMIN')')}">
+        <a href="/index">Back to index</a> <!-- Adjust the href accordingly -->
+        <br>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Scenario 3: User logged in as a regular user -->
+    <div th:if="${#authorization.expression('hasRole('ROLE_USER')')}">
+        <a href="/index">Back to index</a> <!-- Adjust the href accordingly -->
+        <br>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Include any JavaScript needed for form validation -->
+    <script src="/static/js/script.js"></script> <!-- Add the correct path for your JavaScript file -->
+
+</body>
+
+</html>

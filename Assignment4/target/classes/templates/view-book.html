@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${'Reviews for ' + book.title + ' by ' + book.author}">Reviews for Book</title>
+    <link rel="stylesheet" href="/static/css/styles.css"> <!-- Add the correct path for your CSS file -->
+</head>
+
+<body>
+
+    <h1 th:text="${'Reviews for ' + book.title + ' by ' + book.author}"></h1>
+
+    <br>
+    <br>
+
+    <!-- Check if reviews exist for the book -->
+    <div th:if="${#lists.isEmpty(book.reviews)}">
+        <h4>No reviews yet. Be the first to review it!</h4>
+    </div>
+
+    <!-- Display reviews if they exist -->
+    <div th:unless="${#lists.isEmpty(book.reviews)}">
+        <ul>
+            <li th:each="review : ${book.reviews}" th:text="${review.text}"></li>
+        </ul>
+    </div>
+
+    <br>
+    <br>
+
+    <!-- Logic for different user scenarios -->
+    <!-- Scenario 1: User not logged in -->
+    <div th:if="${not #authorization.expression('isAuthenticated()')}">
+        <a href="/login">Login here</a>
+    </div>
+
+    <!-- Scenario 2: User logged in as admin -->
+    <div th:if="${#authorization.expression('hasRole('ROLE_ADMIN')')}">
+        <a href="/add-review">Add a review</a> <!-- You may need to create an "add-review.html" page -->
+        <br>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Scenario 3: User logged in as a regular user -->
+    <div th:if="${#authorization.expression('hasRole('ROLE_USER')')}">
+        <a href="/add-review">Add a review</a> <!-- You may need to create an "add-review.html" page -->
+        <br>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <br>
+
+    <a href="/index">Back to index</a> <!-- Adjust the href accordingly -->
+
+</body>
+
+</html>
